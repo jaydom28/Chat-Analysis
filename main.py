@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 from datetime import datetime
 
 from pprint import pprint as pp
@@ -31,6 +34,39 @@ def filter_messages_by_date(message_objects, month=None, day=None, year=None):
     return filtered_messages
 
 
+def create_pie_chart(data):
+    """
+    Create a pie chart given some data
+    data is some dictionary of strings to numbers
+    """
+
+    labels = []
+    numbers = []
+    for string, number in data.items():
+        labels.append(string) 
+        numbers.append(number) 
+
+    plt.pie(numbers, labels=labels, autopct='%.1f%%')
+    plt.show() 
+
+
+def create_bar_chart(data):
+    """
+    Create a bar chart given a dict of data
+    """
+    labels = []
+    numbers = []
+    for string, number in data.items():
+        labels.append(string)
+        numbers.append(number)
+
+    plt.bar(labels, numbers)
+    # plt.title('Country Vs GDP Per Capita')
+    plt.xlabel('Names')
+    plt.ylabel('Messages Sent')
+    plt.show()
+
+
 def main():
     # Read the messages from a file
     data_file = 'message_data/message_1.json'
@@ -53,13 +89,26 @@ def main():
     months_of_year = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                       'August', 'September', 'October', 'November', 'December']
     total = 0
+    bar_data = {}
     for month in months_of_year:
         msgs = filter_messages_by_date(message_objects, month=month)
         num_msgs = len(msgs)
+        bar_data[month[:3]] = len(msgs)
         print(f'{month}: {num_msgs} messages sent')
         total += num_msgs
 
-    print(total)
+    # print(total)
+
+    # Create a pie chart that displays the total number of messages per member
+    # construct the data dictionary of strings to numbers to pass in
+    pie_data = {}
+
+    for name, messages in name_msg_dict.items():
+        pie_data[name] = len(messages)
+    # create_pie_chart(pie_data)
+
+    # Create a bar chart of messages sent per month
+    create_bar_chart(bar_data)
 
 
     # Use the message data to create message objects
